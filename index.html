@@ -1,40 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>DB Service PK - VIP</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- 🔹 Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXX');
-  </script>
-
-  <!-- 🔹 Adsense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" crossorigin="anonymous"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NDRA Search Portal</title>
   <style>
     body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg,#0f0c29,#302b63,#24243e);
-      color: #fff;
+      background: #0f172a;
+      color: #f8fafc;
+      font-family: Arial, sans-serif;
       display: flex;
+      flex-direction: column;
       justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-      padding: 20px;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
-    .container {
-      width: 100%;
-      max-width: 520px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(12px);
-      border-radius: 18px;
+    .logo {
+      width: 120px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin-bottom: 15px;
+      font-size: 2rem;
+    }
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    input {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      width: 250px;
+      font-size: 1rem;
+    }
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      background: #2563eb;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1e40af;
+    }
+    #results {
+      margin-top: 20px;
+      max-width: 500px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Logo_placeholder.svg/120px-Logo_placeholder.svg.png" alt="NDRA Logo" class="logo">
+  <h1>NDRA Search</h1>
+  <div class="search-box">
+    <input type="text" id="query" placeholder="Enter search keyword...">
+    <button onclick="searchData()">Search</button>
+  </div>
+  <div id="results"></div>
+
+  <script>
+    async function searchData() {
+      const query = document.getElementById("query").value;
+      if (!query) {
+        alert("Please enter a search term");
+        return;
+      }
+      document.getElementById("results").innerHTML = "Loading...";
+      try {
+        const res = await fetch(`/api/proxy?query=${encodeURIComponent(query)}`);
+        const data = await res.json();
+        document.getElementById("results").innerHTML = 
+          `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+      } catch (err) {
+        document.getElementById("results").innerHTML = "❌ Error fetching data";
+      }
+    }
+  </script>
+</body>
+</html>      border-radius: 18px;
       box-shadow: 0 8px 25px rgba(0,0,0,0.4);
       overflow: hidden;
       animation: fadeIn 1s ease;
